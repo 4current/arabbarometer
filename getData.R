@@ -67,6 +67,8 @@ if (file.exists("cleanData.RData")) {
         rename(internet=INTERNET) %>%
         select(country, internet, education, married, age, employed, sex, religion)
     
-    cleanData$internet <- ifelse(cleanData$internet < 3, 1, 0)
+    cleanData$internet <- ifelse(cleanData$internet <= 3, 2, 1)
+    cleanData$internet <- factor(cleanData$internet, labels=c("Non-User", "User"))
+    cleanData <- cleanData[complete.cases(cleanData),]
     save(cleanData, file="cleanData.RData")
 }

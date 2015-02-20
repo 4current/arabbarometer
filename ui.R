@@ -36,7 +36,8 @@ shinyUI(
                                   "Married" = "married",
                                   "Religion" = "religion",
                                   "Employed" = "employed",
-                                  "Sex" = "sex"),
+                                  "Sex" = "sex",
+                                  "Internet" = "internet"),
                                 selected="age"
                     ),
                     selectInput('param2',
@@ -46,7 +47,8 @@ shinyUI(
                                   "Married" = "married",
                                   "Religion" = "religion",
                                   "Employed" = "employed",
-                                  "Sex" = "sex"),
+                                  "Sex" = "sex",
+                                  "Internet" = "internet"),
                                 selected="education"
                     ),                    
                     hr(),
@@ -62,21 +64,45 @@ shinyUI(
         ), # End tabPanel
         tabPanel(
             "Application",
-            sidebarLayout(
-                sidebarPanel(
-                    sliderInput(
-                        "trainFraction",
-                        "Fraction for Training Set",
-                        min=0,
-                        max=1,
-                        value=.6
+            verticalLayout(
+                sidebarLayout(
+                    sidebarPanel(
+                        sliderInput(
+                            "trainFraction",
+                            "Fraction for Training Set",
+                            min=0,
+                            max=1,
+                            value=.6
                         ),
-                    actionButton("doIt", "Run")
+                        actionButton("doIt", "Redo Training"),
+                        hr(),
+                        helpText("Change the proportion of data you
+                             would like to use for training and submit.
+                             to re-calculate the decision tree.")
+                        
                     ),
-                mainPanel(
-                    tableOutput('trainingStats')
-                     )
-            ) # End sidebarLayout
+                    
+                    mainPanel(
+                        plotOutput('classificationTree')
+                    )
+                ), # End sidebarLayout
+                hr(),
+                sidebarLayout(
+                    sidebarPanel(
+                        actionButton('testPrediction', 'Test Prediction'),
+                        hr(),
+                        helpText("Press the Test Prediction button
+                                to see how accurate the model is.")                        
+                    ),
+                    mainPanel(
+                        tableOutput("predictResults"),
+                        splitLayout(
+                            tableOutput("predictOverall"),
+                            tableOutput("predictClass")
+                        )
+                    )
+                ) # End sidebarLayout
+            ) # End of verticalLayout
         ) # End tabPanel
     ) # End navbarPage
 ) # End shinyUI
